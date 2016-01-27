@@ -55,7 +55,6 @@ public class CacheExposer {
         if (cache == null) {
             cache = this.cacheManager.createCache(cacheName, configuration);
         }
-
         return cache;
     }
 
