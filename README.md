@@ -11,15 +11,16 @@ Inspired by JPA
 
 ```xml
 
-<cache>
-    <cache-unit name="articles">
+<caching>
     <class>com.hazelcast.cache.HazelcastCachingProvider</class>
+    <cache name="it">
         <configuration>
             <property name="store.by.value" value="true"/>
             <property name="management.enabled" value="true"/>
             <property name="statistics.enabled" value="true"/>
+            <property name="vendor.specific" value="unicorn"/>
         </configuration>
-    </cache-unit>
-</cache>
+    </cache>
+</caching>
 
 ```
