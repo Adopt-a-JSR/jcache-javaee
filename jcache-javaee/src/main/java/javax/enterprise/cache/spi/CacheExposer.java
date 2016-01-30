@@ -43,9 +43,12 @@ public class CacheExposer {
         this.cacheManager = cachingProvider.getCacheManager();
         CacheUnitProvider cacheProvider = new CacheUnitProvider();
         List<CacheUnit> cacheUnits = cacheProvider.getCacheUnits();
-        this.caches = cacheUnits.stream().
-                collect(Collectors.toMap(CacheUnit::getName, this::createFrom));
+        this.caches = createCaches(cacheUnits);
 
+    }
+
+    Map<String, Cache<String, String>> createCaches(List<CacheUnit> cacheUnits) {
+        return cacheUnits.stream().collect(Collectors.toMap(CacheUnit::getName, this::createFrom));
     }
 
     Cache<String, String> createFrom(CacheUnit unit) {
