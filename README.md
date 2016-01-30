@@ -11,9 +11,9 @@ Inspired by JPA
 
 ```xml
 
-<cache-unit>
+<caching>
     <class>com.hazelcast.cache.HazelcastCachingProvider</class>
-    <cache name="articles">
+    <cache name="it">
         <configuration>
             <property name="store.by.value" value="true"/>
             <property name="management.enabled" value="true"/>
@@ -21,6 +21,6 @@ Inspired by JPA
             <property name="vendor.specific" value="unicorn"/>
         </configuration>
     </cache>
-</cache-unit>
+</caching>
 
 ```
