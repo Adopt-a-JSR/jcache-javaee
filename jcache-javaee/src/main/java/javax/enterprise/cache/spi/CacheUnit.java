@@ -16,6 +16,9 @@ public class CacheUnit {
     private boolean statisticsEnabled;
     private Map<String, String> configurationProperties;
 
+    CacheUnit() {
+    }
+
     public CacheUnit(String name, String cachingProviderClass, boolean storeByValue,
             boolean managementEnabled, boolean statisticsEnabled) {
         this.name = name;

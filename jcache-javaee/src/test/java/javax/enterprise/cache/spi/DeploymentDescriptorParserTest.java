@@ -14,11 +14,23 @@ import org.junit.Test;
 public class DeploymentDescriptorParserTest {
 
     @Test
-    public void parse() throws IOException {
-        String ddContent = new String(Files.readAllBytes(Paths.get("src/test/resources/META-INF/named-cache.xml")));
+    public void cacheUnitName() throws IOException {
+        String ddContent = getDeploymentDescriptor("named-cache.xml");
         CacheUnit unit = DeploymentDescriptorParser.parse(ddContent);
         String name = unit.getName();
         assertThat(name, is("named"));
+    }
+
+    @Test
+    public void cacheProviderClass() throws IOException {
+        String ddContent = getDeploymentDescriptor("cache-provider.xml");
+        CacheUnit unit = DeploymentDescriptorParser.parse(ddContent);
+        String cachingProviderClass = unit.getCachingProviderClass();
+        assertThat(cachingProviderClass, is("java.Duke"));
+    }
+
+    static String getDeploymentDescriptor(String descriptorName) throws IOException {
+        return new String(Files.readAllBytes(Paths.get("src/test/resources/META-INF/" + descriptorName)));
     }
 
 }

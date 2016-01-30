@@ -30,6 +30,7 @@ public interface DeploymentDescriptorParser {
 
     static String ELEMENT_CACHE_UNIT = "cache-unit";
     static String ELEMENT_CACHE = "cache";
+    static String ELEMENT_CLASS = "class";
     static String ATTRIBUTE_CACHE_NAME = "name";
 
     static CacheUnit parse(String content) {
@@ -49,16 +50,28 @@ public interface DeploymentDescriptorParser {
                 if (nameAttribute != null) {
                     unit.setName(nameAttribute.getNodeValue());
                 }
+                String cachingProvider = findSubNode(ELEMENT_CLASS, cacheUnit);
+                unit.setCachingProviderClass(cachingProvider);
+
                 NodeList childNodes = cacheUnit.getChildNodes();
                 for (int i = 0; i < childNodes.getLength(); i++) {
                     Node item = childNodes.item(i);
-                    if (ELEMENT_CACHE.equalsIgnoreCase(item.getNodeName())) {
-                    }
                 }
             } catch (SAXException | IOException ex) {
                 throw new IllegalStateException(ex);
             }
         }
         return unit;
+    }
+
+    static String findSubNode(String nodeName, Node parent) {
+        NodeList childNodes = parent.getChildNodes();
+        for (int i = 0; i < childNodes.getLength(); i++) {
+            Node item = childNodes.item(i);
+            if (nodeName.equals(item.getNodeName())) {
+                return item.getTextContent();
+            }
+        }
+        return null;
     }
 }
