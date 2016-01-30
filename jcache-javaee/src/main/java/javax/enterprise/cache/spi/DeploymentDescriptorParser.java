@@ -28,7 +28,7 @@ import org.xml.sax.SAXException;
  */
 public interface DeploymentDescriptorParser {
 
-    static String ELEMENT_CACHE_UNIT = "cache-unit";
+    static String ELEMENT_CACHING = "caching";
     static String ELEMENT_CACHE = "cache";
     static String ELEMENT_CLASS = "class";
     static String ATTRIBUTE_CACHE_NAME = "name";
@@ -45,17 +45,19 @@ public interface DeploymentDescriptorParser {
         try (StringReader reader = new StringReader(content)) {
             try {
                 Document document = builder.parse(new InputSource(reader));
-                Node cacheUnit = document.getElementsByTagName(ELEMENT_CACHE_UNIT).item(0);
-                Node nameAttribute = cacheUnit.getAttributes().getNamedItem(ATTRIBUTE_CACHE_NAME);
-                if (nameAttribute != null) {
-                    unit.setName(nameAttribute.getNodeValue());
-                }
-                String cachingProvider = findSubNode(ELEMENT_CLASS, cacheUnit);
+                Node caching = document.getElementsByTagName(ELEMENT_CACHING).item(0);
+                String cachingProvider = findSubNode(ELEMENT_CLASS, caching);
                 unit.setCachingProviderClass(cachingProvider);
 
-                NodeList childNodes = cacheUnit.getChildNodes();
+                NodeList childNodes = caching.getChildNodes();
                 for (int i = 0; i < childNodes.getLength(); i++) {
                     Node item = childNodes.item(i);
+                    if (ELEMENT_CACHE.equalsIgnoreCase(item.getNodeName())) {
+                        Node nameAttribute = item.getAttributes().getNamedItem(ATTRIBUTE_CACHE_NAME);
+                        if (nameAttribute != null) {
+                            unit.setName(nameAttribute.getNodeValue());
+                        }
+                    }
                 }
             } catch (SAXException | IOException ex) {
                 throw new IllegalStateException(ex);

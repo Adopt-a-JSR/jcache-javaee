@@ -1,4 +1,4 @@
-<cache-unit>
+<caching>
     <class>com.hazelcast.cache.HazelcastCachingProvider</class>
     <cache name="it">
         <configuration>
@@ -8,4 +8,4 @@
             <property name="vendor.specific" value="unicorn"/>
         </configuration>
     </cache>
-</cache-unit>
+</caching>
