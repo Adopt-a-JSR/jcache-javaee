@@ -9,29 +9,69 @@ import java.util.Map;
  */
 public class CacheUnit {
 
-    public String getName() {
-        return "articles";
+    private String name;
+    private String cachingProviderClass;
+    private boolean storeByValue;
+    private boolean managementEnabled;
+    private boolean statisticsEnabled;
+    private Map<String, String> configurationProperties;
+
+    public CacheUnit(String name, String cachingProviderClass, boolean storeByValue,
+            boolean managementEnabled, boolean statisticsEnabled) {
+        this.name = name;
+        this.cachingProviderClass = cachingProviderClass;
+        this.storeByValue = storeByValue;
+        this.managementEnabled = managementEnabled;
+        this.statisticsEnabled = statisticsEnabled;
+        this.configurationProperties = new HashMap<>();
     }
 
-    public String getCachingProvider() {
-        return "com.hazelcast.cache.HazelcastCachingProvider";
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getCachingProviderClass() {
+        return cachingProviderClass;
+    }
+
+    public void setCachingProviderClass(String cachingProviderClass) {
+        this.cachingProviderClass = cachingProviderClass;
     }
 
     public boolean isStoreByValue() {
-        return true;
+        return storeByValue;
+    }
+
+    public void setStoreByValue(boolean storeByValue) {
+        this.storeByValue = storeByValue;
     }
 
     public boolean isManagementEnabled() {
-        return true;
+        return managementEnabled;
+    }
+
+    public void setManagementEnabled(boolean managementEnabled) {
+        this.managementEnabled = managementEnabled;
     }
 
     public boolean isStatisticsEnabled() {
-        return true;
+        return statisticsEnabled;
+    }
+
+    public void setStatisticsEnabled(boolean statisticsEnabled) {
+        this.statisticsEnabled = statisticsEnabled;
     }
 
     public Map<String, String> getConfigurationProperties() {
-        return new HashMap<>();
+        return configurationProperties;
+    }
 
+    public void addProperty(String key, String value) {
+        this.configurationProperties.put(key, value);
     }
 
 }
