@@ -1,4 +1,4 @@
-package javax.enterprise.cache.spi;
+package javax.enterprise.cache.spi.descriptor;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -7,22 +7,20 @@ import java.util.Map;
  *
  * @author airhacks.com
  */
-public class CacheUnit {
+public class CacheMetaData {
 
     private String name;
-    private String cachingProviderClass;
     private boolean storeByValue;
     private boolean managementEnabled;
     private boolean statisticsEnabled;
     private Map<String, String> configurationProperties;
 
-    CacheUnit() {
+    public CacheMetaData() {
     }
 
-    public CacheUnit(String name, String cachingProviderClass, boolean storeByValue,
+    public CacheMetaData(String name, boolean storeByValue,
             boolean managementEnabled, boolean statisticsEnabled) {
         this.name = name;
-        this.cachingProviderClass = cachingProviderClass;
         this.storeByValue = storeByValue;
         this.managementEnabled = managementEnabled;
         this.statisticsEnabled = statisticsEnabled;
@@ -35,14 +33,6 @@ public class CacheUnit {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getCachingProviderClass() {
-        return cachingProviderClass;
-    }
-
-    public void setCachingProviderClass(String cachingProviderClass) {
-        this.cachingProviderClass = cachingProviderClass;
     }
 
     public boolean isStoreByValue() {

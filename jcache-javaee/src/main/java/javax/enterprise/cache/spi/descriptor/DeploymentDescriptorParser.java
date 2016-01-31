@@ -1,4 +1,4 @@
-package javax.enterprise.cache.spi;
+package javax.enterprise.cache.spi.descriptor;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -12,9 +12,9 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 /**
- * <cache-unit>
+ * <caching>
  * <class>com.hazelcast.cache.HazelcastCachingProvider</class>
- * <cache name="articles">
+ * <cache name="it">
  * <configuration>
  * <property name="store.by.value" value="true"/>
  * <property name="management.enabled" value="true"/>
@@ -22,21 +22,21 @@ import org.xml.sax.SAXException;
  * <property name="vendor.specific" value="unicorn"/>
  * </configuration>
  * </cache>
- * </cache-unit>
+ * </caching>
  *
  * @author airhacks.com
  */
 public interface DeploymentDescriptorParser {
 
-    static String ELEMENT_CACHING = "caching";
+    static String ELEMENT_CACHES = "caches";
     static String ELEMENT_CACHE = "cache";
     static String ELEMENT_CLASS = "class";
     static String ATTRIBUTE_CACHE_NAME = "name";
 
-    static CacheUnit parse(String content) {
+    static CachesMetaData parse(String content) {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = null;
-        CacheUnit unit = new CacheUnit();
+        CachesMetaData caches = new CachesMetaData();
         try {
             builder = factory.newDocumentBuilder();
         } catch (ParserConfigurationException ex) {
@@ -45,25 +45,27 @@ public interface DeploymentDescriptorParser {
         try (StringReader reader = new StringReader(content)) {
             try {
                 Document document = builder.parse(new InputSource(reader));
-                Node caching = document.getElementsByTagName(ELEMENT_CACHING).item(0);
+                Node caching = document.getElementsByTagName(ELEMENT_CACHES).item(0);
                 String cachingProvider = findSubNode(ELEMENT_CLASS, caching);
-                unit.setCachingProviderClass(cachingProvider);
+                caches.setCachingProviderClass(cachingProvider);
 
                 NodeList childNodes = caching.getChildNodes();
                 for (int i = 0; i < childNodes.getLength(); i++) {
                     Node item = childNodes.item(i);
                     if (ELEMENT_CACHE.equalsIgnoreCase(item.getNodeName())) {
+                        CacheMetaData cacheMetaData = new CacheMetaData();
                         Node nameAttribute = item.getAttributes().getNamedItem(ATTRIBUTE_CACHE_NAME);
                         if (nameAttribute != null) {
-                            unit.setName(nameAttribute.getNodeValue());
+                            cacheMetaData.setName(nameAttribute.getNodeValue());
                         }
+                        caches.add(cacheMetaData);
                     }
                 }
             } catch (SAXException | IOException ex) {
                 throw new IllegalStateException(ex);
             }
         }
-        return unit;
+        return caches;
     }
 
     static String findSubNode(String nodeName, Node parent) {

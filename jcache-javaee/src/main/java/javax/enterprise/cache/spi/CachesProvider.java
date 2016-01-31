@@ -1,19 +1,20 @@
 package javax.enterprise.cache.spi;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
+import javax.enterprise.cache.spi.descriptor.CachesMetaData;
+import javax.enterprise.cache.spi.descriptor.DeploymentDescriptorLoader;
+import javax.enterprise.cache.spi.descriptor.DeploymentDescriptorParser;
 
 /**
  *
  * @author airhacks.com
  */
-public class CacheUnitProvider {
+public interface CachesProvider {
 
-    static List<CacheUnit> getCacheUnits() {
+    static CachesMetaData getCacheUnits() {
         try {
             String ddContent = DeploymentDescriptorLoader.load();
-            return Arrays.asList(DeploymentDescriptorParser.parse(ddContent));
+            return DeploymentDescriptorParser.parse(ddContent);
         } catch (IOException ex) {
             throw new IllegalStateException("Interpreting DD failed", ex);
         }

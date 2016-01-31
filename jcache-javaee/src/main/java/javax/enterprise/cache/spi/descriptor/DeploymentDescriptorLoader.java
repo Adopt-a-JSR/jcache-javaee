@@ -1,4 +1,4 @@
-package javax.enterprise.cache.spi;
+package javax.enterprise.cache.spi.descriptor;
 
 import java.io.BufferedReader;
 import java.io.IOException;
