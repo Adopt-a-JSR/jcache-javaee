@@ -13,26 +13,29 @@ import java.util.stream.Collectors;
  */
 public interface DeploymentDescriptorLoader {
 
-    static final String DD_JAR_LOCATION = "META-INF/cache.xml";
+    static final String DD_JAR_LOCATION = "META-INF/";
     static final String DD_WAR_LOCATION = "WEB-INF/classes/" + DD_JAR_LOCATION;
+    public static String DD_FILE_NAME = "javax.enterprise.cache.spi.DeploymentDescriptorName";
 
     static String load() throws IOException {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-
-        try (InputStream ddStream = classLoader.getResourceAsStream(DD_JAR_LOCATION)) {
+        try (InputStream ddStream = classLoader.getResourceAsStream(getFileName(DD_JAR_LOCATION))) {
             if (ddStream != null) {
                 return read(ddStream);
             }
         }
-
-        try (InputStream ddStream = classLoader.getResourceAsStream(DD_WAR_LOCATION)) {
+        try (InputStream ddStream = classLoader.getResourceAsStream(getFileName(DD_WAR_LOCATION))) {
             if (ddStream == null) {
                 throw new IllegalStateException("cache.xml neither found in " + DD_JAR_LOCATION + " nor " + DD_WAR_LOCATION);
             } else {
                 return read(ddStream);
             }
         }
+    }
 
+    static String getFileName(String folder) {
+        String fileName = System.getProperty(DD_FILE_NAME, "cache.xml");
+        return folder + fileName;
     }
 
     static String read(InputStream input) throws IOException {
