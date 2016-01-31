@@ -1,5 +1,5 @@
 <caches>
-    <class>com.hazelcast.cache.HazelcastCachingProvider</class>
+    <class>org.jsr107.ri.spi.RICachingProvider</class>
     <cache name="it">
         <configuration>
             <property name="store.by.value" value="true"/>

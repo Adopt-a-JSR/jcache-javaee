@@ -43,10 +43,9 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.hazelcast</groupId>
-            <artifactId>hazelcast</artifactId>
-            <version>3.5.4</version>
-            <scope>compile</scope>
+            <groupId>org.jsr107.ri</groupId>
+            <artifactId>cache-ri-impl</artifactId>
+            <version>1.0.0</version>
         </dependency>
     </dependencies>
     <build>
