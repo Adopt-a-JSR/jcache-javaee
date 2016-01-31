@@ -38,7 +38,7 @@ public class DeploymentDescriptorParserTest {
 
     @Test
     public void configurationProperties() throws IOException {
-        CachesMetaData cachesMetaData = extractCachesMetaData("cache.xml");
+        CachesMetaData cachesMetaData = extractCachesMetaData("configuration.xml");
         CacheMetaData cache = getFirstCache(cachesMetaData);
         Map<String, String> configurationProperties = cache.getConfigurationProperties();
         assertNotNull(configurationProperties);

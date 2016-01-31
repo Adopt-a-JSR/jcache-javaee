@@ -1,6 +1,5 @@
 package javax.enterprise.cache.spi.descriptor;
 
-import javax.enterprise.cache.spi.descriptor.DeploymentDescriptorLoader;
 import java.io.IOException;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
