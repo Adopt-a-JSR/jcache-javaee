@@ -2,6 +2,8 @@ package javax.enterprise.cache.spi.descriptor;
 
 import java.util.HashMap;
 import java.util.Map;
+import javax.cache.configuration.Configuration;
+import javax.cache.configuration.MutableConfiguration;
 
 /**
  *
@@ -10,10 +12,10 @@ import java.util.Map;
 public class CacheMetaData {
 
     private String name;
-    private boolean storeByValue;
-    private boolean managementEnabled;
-    private boolean statisticsEnabled;
     private Map<String, String> configurationProperties;
+    static final String PROPERTY_KEY_STORE_BY_VALUE = "store.by.value";
+    static final String PROPERTY_KEY_IS_MANAGEMENT_ENABLED = "management.enabled";
+    static final String PROPERTY_KEY_IS_STATISTICS_ENABLED = "statistics.enabled";
 
     public CacheMetaData() {
         this.configurationProperties = new HashMap<>();
@@ -23,9 +25,6 @@ public class CacheMetaData {
             boolean managementEnabled, boolean statisticsEnabled) {
         this();
         this.name = name;
-        this.storeByValue = storeByValue;
-        this.managementEnabled = managementEnabled;
-        this.statisticsEnabled = statisticsEnabled;
     }
 
     public String getName() {
@@ -37,27 +36,15 @@ public class CacheMetaData {
     }
 
     public boolean isStoreByValue() {
-        return storeByValue;
-    }
-
-    public void setStoreByValue(boolean storeByValue) {
-        this.storeByValue = storeByValue;
+        return getPropertyAsBoolean(PROPERTY_KEY_STORE_BY_VALUE);
     }
 
     public boolean isManagementEnabled() {
-        return managementEnabled;
-    }
-
-    public void setManagementEnabled(boolean managementEnabled) {
-        this.managementEnabled = managementEnabled;
+        return getPropertyAsBoolean(PROPERTY_KEY_IS_MANAGEMENT_ENABLED);
     }
 
     public boolean isStatisticsEnabled() {
-        return statisticsEnabled;
-    }
-
-    public void setStatisticsEnabled(boolean statisticsEnabled) {
-        this.statisticsEnabled = statisticsEnabled;
+        return getPropertyAsBoolean(PROPERTY_KEY_IS_STATISTICS_ENABLED);
     }
 
     public Map<String, String> getConfigurationProperties() {
@@ -75,6 +62,16 @@ public class CacheMetaData {
     boolean getPropertyAsBoolean(String key) {
         String value = this.configurationProperties.getOrDefault(key, "false");
         return Boolean.parseBoolean(value);
+    }
+
+    public Configuration<String, String> getConfiguration() {
+        MutableConfiguration<String, String> configuration = new MutableConfiguration<>();
+        configuration.setStoreByValue(isStoreByValue()).
+                //hardcoded TBD
+                setTypes(String.class, String.class).
+                setManagementEnabled(isManagementEnabled()).
+                setStatisticsEnabled(isStatisticsEnabled());
+        return configuration;
     }
 
 }
