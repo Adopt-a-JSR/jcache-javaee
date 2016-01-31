@@ -8,12 +8,4 @@
             <property name="vendor.specific" value="unicorn"/>
         </configuration>
     </cache>
-    <cache name="hack3rz">
-        <configuration>
-            <property name="store.by.value" value="false"/>
-            <property name="management.enabled" value="true"/>
-            <property name="statistics.enabled" value="false"/>
-            <property name="java" value="duke"/>
-        </configuration>
-    </cache>
 </caches>
