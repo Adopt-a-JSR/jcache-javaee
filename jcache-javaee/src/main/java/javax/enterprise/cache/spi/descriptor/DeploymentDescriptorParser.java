@@ -65,7 +65,7 @@ public interface DeploymentDescriptorParser {
                         cacheMetaData.setName(cacheName);
                         NodeList cacheChildren = item.getChildNodes();
                         for (int j = 0; j < cacheChildren.getLength(); j++) {
-                            Node cacheKid = cacheChildren.item(i);
+                            Node cacheKid = cacheChildren.item(j);
                             if (ELEMENT_CONFIGURATION.equalsIgnoreCase(cacheKid.getNodeName())) {
                                 Map<String, String> properties = extractProperties(cacheKid);
                                 cacheMetaData.setConfigurationProperties(properties);
