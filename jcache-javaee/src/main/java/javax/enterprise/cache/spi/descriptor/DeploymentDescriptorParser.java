@@ -38,7 +38,7 @@ public interface DeploymentDescriptorParser {
 
     static String ELEMENT_CACHES = "caches";
     static String ELEMENT_CACHE = "cache";
-    static String ELEMENT_CLASS = "class";
+    static String ELEMENT_CACHING_PROVIDER = "caching-provider";
     static String ELEMENT_CONFIGURATION = "configuration";
     static String ELEMENT_PROPERTY = "property";
     static String ATTRIBUTE_CACHE_NAME = "name";
@@ -58,7 +58,7 @@ public interface DeploymentDescriptorParser {
             try {
                 Document document = builder.parse(new InputSource(reader));
                 Node caching = document.getElementsByTagName(ELEMENT_CACHES).item(0);
-                String cachingProvider = findSubNode(ELEMENT_CLASS, caching);
+                String cachingProvider = findSubNode(ELEMENT_CACHING_PROVIDER, caching);
                 caches.setCachingProviderClass(cachingProvider);
 
                 NodeList cachesChildren = caching.getChildNodes();
