@@ -11,6 +11,8 @@ import javax.cache.configuration.Configuration;
 import javax.cache.configuration.MutableConfiguration;
 import javax.cache.spi.CachingProvider;
 import javax.enterprise.cache.CacheContext;
+import javax.enterprise.cache.spi.descriptor.CacheMetaData;
+import javax.enterprise.cache.spi.descriptor.CachesMetaData;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.Destroyed;
 import javax.enterprise.context.Initialized;
@@ -39,19 +41,18 @@ public class CacheExposer {
 
     public void init(@Observes @Initialized(ApplicationScoped.class) Object doesntMatter) {
         this.caches = new HashMap<>();
-        this.cachingProvider = Caching.getCachingProvider();
+        CachesMetaData caches = CachesProvider.getCacheUnits();
+        this.cachingProvider = Caching.getCachingProvider(caches.getCachingProviderClass());
         this.cacheManager = cachingProvider.getCacheManager();
-        CacheUnitProvider cacheProvider = new CacheUnitProvider();
-        List<CacheUnit> cacheUnits = cacheProvider.getCacheUnits();
-        this.caches = createCaches(cacheUnits);
+        this.caches = createCaches(caches.getCaches());
 
     }
 
-    Map<String, Cache<String, String>> createCaches(List<CacheUnit> cacheUnits) {
-        return cacheUnits.stream().collect(Collectors.toMap(CacheUnit::getName, this::createFrom));
+    Map<String, Cache<String, String>> createCaches(List<CacheMetaData> cacheUnits) {
+        return cacheUnits.stream().collect(Collectors.toMap(CacheMetaData::getName, this::createFrom));
     }
 
-    Cache<String, String> createFrom(CacheUnit unit) {
+    Cache<String, String> createFrom(CacheMetaData unit) {
         Configuration<String, String> configuration = this.getConfiguration(unit, String.class, String.class);
         String cacheName = unit.getName();
         Cache<String, String> cache = this.cacheManager.getCache(cacheName, String.class, String.class);
@@ -80,7 +81,7 @@ public class CacheExposer {
         return this.caches.size() == 1;
     }
 
-    public Configuration<String, String> getConfiguration(CacheUnit unit, Class key, Class value) {
+    public Configuration<String, String> getConfiguration(CacheMetaData unit, Class key, Class value) {
         MutableConfiguration<String, String> configuration = new MutableConfiguration<>();
         configuration.setStoreByValue(unit.isStoreByValue()).
                 setTypes(key, value).
