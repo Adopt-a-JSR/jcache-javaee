@@ -16,15 +16,16 @@ public class CacheMetaData {
     private Map<String, String> configurationProperties;
 
     public CacheMetaData() {
+        this.configurationProperties = new HashMap<>();
     }
 
     public CacheMetaData(String name, boolean storeByValue,
             boolean managementEnabled, boolean statisticsEnabled) {
+        this();
         this.name = name;
         this.storeByValue = storeByValue;
         this.managementEnabled = managementEnabled;
         this.statisticsEnabled = statisticsEnabled;
-        this.configurationProperties = new HashMap<>();
     }
 
     public String getName() {
@@ -69,6 +70,11 @@ public class CacheMetaData {
 
     public void addProperty(String key, String value) {
         this.configurationProperties.put(key, value);
+    }
+
+    boolean getPropertyAsBoolean(String key) {
+        String value = this.configurationProperties.getOrDefault(key, "false");
+        return Boolean.parseBoolean(value);
     }
 
 }
