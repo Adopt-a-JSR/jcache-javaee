@@ -15,17 +15,22 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 /**
- * <caching>
- * <class>com.hazelcast.cache.HazelcastCachingProvider</class>
- * <cache name="it">
- * <configuration>
- * <property name="store.by.value" value="true"/>
- * <property name="management.enabled" value="true"/>
- * <property name="statistics.enabled" value="true"/>
- * <property name="vendor.specific" value="unicorn"/>
- * </configuration>
- * </cache>
- * </caching>
+ *
+ * <pre>
+ * <code>
+ * &lt;caches&gt;
+ * &lt;class&gt;org.jsr107.ri.spi.RICachingProvider&lt;/class&gt;
+ * &lt;cache name="it"&gt;
+ * &lt;configuration&gt;
+ * &lt;property name="store.by.value" value="true"/&gt;
+ * &lt;property name="management.enabled" value="true"/&gt;
+ * &lt;property name="statistics.enabled" value="true"/&gt;
+ * &lt;property name="vendor.specific" value="unicorn"/&gt;
+ * &lt;/configuration&gt;
+ * &lt;/cache&gt;
+ * &lt;/caches&gt;
+ * </code>
+ * </pre>
  *
  * @author airhacks.com
  */
@@ -38,7 +43,7 @@ public interface DeploymentDescriptorParser {
     static String ELEMENT_PROPERTY = "property";
     static String ATTRIBUTE_CACHE_NAME = "name";
     static String ATTRIBUTE_PROPERTY_NAME = "name";
-    static String ATTRIBUTE_PROPERTY_VALUE = "name";
+    static String ATTRIBUTE_PROPERTY_VALUE = "value";
 
     static CachesMetaData parse(String content) {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();

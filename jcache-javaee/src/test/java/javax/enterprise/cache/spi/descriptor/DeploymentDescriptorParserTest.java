@@ -6,6 +6,7 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.hasEntry;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import org.junit.Test;
@@ -41,6 +42,11 @@ public class DeploymentDescriptorParserTest {
         CacheMetaData cache = getFirstCache(cachesMetaData);
         Map<String, String> configurationProperties = cache.getConfigurationProperties();
         assertNotNull(configurationProperties);
+        assertThat(configurationProperties.size(), is(4));
+        assertThat(configurationProperties, hasEntry("store.by.value", "true"));
+        assertThat(configurationProperties, hasEntry("management.enabled", "false"));
+        assertThat(configurationProperties, hasEntry("statistics.enabled", "true"));
+        assertThat(configurationProperties, hasEntry("vendor.specific", "unicorn"));
     }
 
     CacheMetaData getFirstCache(CachesMetaData cachesMetaData) {
