@@ -2,6 +2,9 @@ package javax.enterprise.cache.spi.descriptor;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -31,7 +34,11 @@ public interface DeploymentDescriptorParser {
     static String ELEMENT_CACHES = "caches";
     static String ELEMENT_CACHE = "cache";
     static String ELEMENT_CLASS = "class";
+    static String ELEMENT_CONFIGURATION = "configuration";
+    static String ELEMENT_PROPERTY = "property";
     static String ATTRIBUTE_CACHE_NAME = "name";
+    static String ATTRIBUTE_PROPERTY_NAME = "name";
+    static String ATTRIBUTE_PROPERTY_VALUE = "name";
 
     static CachesMetaData parse(String content) {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -49,14 +56,20 @@ public interface DeploymentDescriptorParser {
                 String cachingProvider = findSubNode(ELEMENT_CLASS, caching);
                 caches.setCachingProviderClass(cachingProvider);
 
-                NodeList childNodes = caching.getChildNodes();
-                for (int i = 0; i < childNodes.getLength(); i++) {
-                    Node item = childNodes.item(i);
+                NodeList cachesChildren = caching.getChildNodes();
+                for (int i = 0; i < cachesChildren.getLength(); i++) {
+                    Node item = cachesChildren.item(i);
                     if (ELEMENT_CACHE.equalsIgnoreCase(item.getNodeName())) {
                         CacheMetaData cacheMetaData = new CacheMetaData();
-                        Node nameAttribute = item.getAttributes().getNamedItem(ATTRIBUTE_CACHE_NAME);
-                        if (nameAttribute != null) {
-                            cacheMetaData.setName(nameAttribute.getNodeValue());
+                        String cacheName = getAttributeValue(item, ATTRIBUTE_CACHE_NAME);
+                        cacheMetaData.setName(cacheName);
+                        NodeList cacheChildren = item.getChildNodes();
+                        for (int j = 0; j < cacheChildren.getLength(); j++) {
+                            Node cacheKid = cacheChildren.item(i);
+                            if (ELEMENT_CONFIGURATION.equalsIgnoreCase(cacheKid.getNodeName())) {
+                                Map<String, String> properties = extractProperties(cacheKid);
+                                cacheMetaData.setConfigurationProperties(properties);
+                            }
                         }
                         caches.add(cacheMetaData);
                     }
@@ -66,6 +79,35 @@ public interface DeploymentDescriptorParser {
             }
         }
         return caches;
+    }
+
+    static Map<String, String> extractProperties(Node configuration) {
+        Map<String, String> properties = new HashMap<>();
+        NodeList cacheChildren = configuration.getChildNodes();
+        for (int i = 0; i < cacheChildren.getLength(); i++) {
+            Node cacheKid = cacheChildren.item(i);
+            if (ELEMENT_PROPERTY.equalsIgnoreCase(cacheKid.getNodeName())) {
+                getAttribute(cacheKid, ATTRIBUTE_PROPERTY_NAME).
+                        ifPresent((t)
+                                -> properties.put(t.getNodeValue(),
+                                getAttributeValue(cacheKid, ATTRIBUTE_PROPERTY_VALUE))
+                        );
+            }
+        }
+        return properties;
+    }
+
+    static Optional<Node> getAttribute(Node node, String name) {
+        return Optional.ofNullable(node.getAttributes().getNamedItem(name));
+    }
+
+    static String getAttributeValue(Node node, String name) {
+        Node attributeItem = node.getAttributes().getNamedItem(name);
+        if (attributeItem == null) {
+            return null;
+        } else {
+            return attributeItem.getNodeValue();
+        }
     }
 
     static String findSubNode(String nodeName, Node parent) {

@@ -17,11 +17,6 @@ public class CachesMetaData {
         this.caches = new ArrayList<>();
     }
 
-    public CachesMetaData(String cachingProviderClass) {
-        this();
-        this.cachingProviderClass = cachingProviderClass;
-    }
-
     public List<CacheMetaData> getCaches() {
         return caches;
     }

@@ -63,6 +63,10 @@ public class CacheMetaData {
         return configurationProperties;
     }
 
+    public void setConfigurationProperties(Map<String, String> configurationProperties) {
+        this.configurationProperties = configurationProperties;
+    }
+
     public void addProperty(String key, String value) {
         this.configurationProperties.put(key, value);
     }
