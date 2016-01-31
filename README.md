@@ -11,16 +11,16 @@ Inspired by JPA
 
 ```xml
 
-<caching>
-    <class>com.hazelcast.cache.HazelcastCachingProvider</class>
+<caches>
+    <caching-provider>org.jsr107.ri.spi.RICachingProvider</caching-provider>
     <cache name="it">
         <configuration>
             <property name="store.by.value" value="true"/>
-            <property name="management.enabled" value="true"/>
+            <property name="management.enabled" value="false"/>
             <property name="statistics.enabled" value="true"/>
             <property name="vendor.specific" value="unicorn"/>
         </configuration>
     </cache>
-</caching>
+</caches>
 
 ```
