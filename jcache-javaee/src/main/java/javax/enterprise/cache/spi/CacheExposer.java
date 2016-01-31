@@ -66,19 +66,29 @@ public class CacheExposer {
     public Cache<String, String> exposeCache(InjectionPoint ip) {
         Annotated annotated = ip.getAnnotated();
         CacheContext annotation = annotated.getAnnotation(CacheContext.class);
-        if (doesConventionWork() && annotation == null) {
+        //single cache defined in DD, no annotation
+        if (doesConventionApply(annotation)) {
             return this.caches.values().iterator().next();
         }
-        String cacheName = annotation.value();
-        Cache<String, String> cache = this.caches.get(cacheName);
-        if (cache == null) {
-            throw new IllegalStateException("Unsatisfied cache dependency error. Cache with name: " + cacheName + " does not exist");
+        //annotation defined, name is used to lookup cache
+        if (annotation != null) {
+            String cacheName = annotation.value();
+            Cache<String, String> cache = this.caches.get(cacheName);
+            if (cache == null) {
+                throw new IllegalStateException("Unsatisfied cache dependency error. Cache with name: " + cacheName + " does not exist");
+            }
+            return cache;
         }
-        return cache;
+        String fieldName = ip.getMember().getDeclaringClass().getName() + "." + ip.getMember().getName();
+        if (this.caches.isEmpty()) {
+            throw new IllegalStateException("No caches defined " + fieldName);
+        } else {
+            throw new IllegalStateException("Ambiguous caches exception: " + this.caches.keySet() + " for field name " + fieldName);
+        }
     }
 
-    boolean doesConventionWork() {
-        return this.caches.size() == 1;
+    boolean doesConventionApply(CacheContext annotation) {
+        return this.caches.size() == 1 && annotation == null;
     }
 
     public Configuration<String, String> getConfiguration(CacheMetaData unit, Class key, Class value) {
