@@ -40,10 +40,10 @@ public class CacheExposer {
 
     public void init(@Observes @Initialized(ApplicationScoped.class) Object doesntMatter) {
         this.caches = new HashMap<>();
-        CachesMetaData caches = CachesProvider.getCacheUnits();
-        this.cachingProvider = Caching.getCachingProvider(caches.getCachingProviderClass());
+        CachesMetaData cachesMetaData = CachesProvider.getCacheUnits();
+        this.cachingProvider = Caching.getCachingProvider(cachesMetaData.getCachingProviderClass());
         this.cacheManager = cachingProvider.getCacheManager();
-        this.caches = createCaches(caches.getCaches());
+        this.caches = createCaches(cachesMetaData.getCaches());
 
     }
 
