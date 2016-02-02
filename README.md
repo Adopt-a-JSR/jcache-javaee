@@ -32,3 +32,31 @@ Inspired by JPA
 </caches>
 
 ```
+
+# Usage
+
+```java
+
+    @Inject
+    @CacheContext("it")
+    Cache first;
+
+    @Inject
+    @CacheContext("hack3rz")
+    Cache second;
+
+    @Inject
+    @CacheContext("hack3rz")
+    Cache alreadyInjected;
+
+    @Test
+    public void cachesWithDifferentNamesAreNotSame() {
+        assertNotSame(first, second);
+    }
+
+    @Test
+    public void cachesWithSameNameAreSame() {
+        assertSame(second, alreadyInjected);
+    }
+    
+```
