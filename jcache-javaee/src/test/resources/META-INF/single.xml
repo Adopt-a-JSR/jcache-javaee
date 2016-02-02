@@ -1,6 +1,6 @@
 <caches>
     <caching-provider>org.jsr107.ri.spi.RICachingProvider</caching-provider>
-    <cache name="it">
+    <cache name="it" key="java.lang.String" value="java.lang.String">
         <configuration>
             <property name="store.by.value" value="true"/>
             <property name="management.enabled" value="false"/>

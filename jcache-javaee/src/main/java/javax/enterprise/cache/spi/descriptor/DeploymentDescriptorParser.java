@@ -42,8 +42,9 @@ public interface DeploymentDescriptorParser {
     static String ELEMENT_CONFIGURATION = "configuration";
     static String ELEMENT_PROPERTY = "property";
     static String ATTRIBUTE_CACHE_NAME = "name";
-    static String ATTRIBUTE_PROPERTY_NAME = "name";
-    static String ATTRIBUTE_PROPERTY_VALUE = "value";
+    static String ATTRIBUTE_NAME = "name";
+    static String ATTRIBUTE_KEY = "key";
+    static String ATTRIBUTE_VALUE = "value";
 
     static CachesMetaData parse(String content) {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -68,6 +69,17 @@ public interface DeploymentDescriptorParser {
                         CacheMetaData cacheMetaData = new CacheMetaData();
                         String cacheName = getAttributeValue(item, ATTRIBUTE_CACHE_NAME);
                         cacheMetaData.setName(cacheName);
+                        getAttribute(item, ATTRIBUTE_KEY).
+                                ifPresent((t)
+                                        -> cacheMetaData.setKey(
+                                        getAttributeValue(item, ATTRIBUTE_KEY))
+                                );
+                        getAttribute(item, ATTRIBUTE_VALUE).
+                                ifPresent((t)
+                                        -> cacheMetaData.setValue(
+                                        getAttributeValue(item, ATTRIBUTE_VALUE))
+                                );
+
                         NodeList cacheChildren = item.getChildNodes();
                         for (int j = 0; j < cacheChildren.getLength(); j++) {
                             Node cacheKid = cacheChildren.item(j);
@@ -92,10 +104,10 @@ public interface DeploymentDescriptorParser {
         for (int i = 0; i < cacheChildren.getLength(); i++) {
             Node cacheKid = cacheChildren.item(i);
             if (ELEMENT_PROPERTY.equalsIgnoreCase(cacheKid.getNodeName())) {
-                getAttribute(cacheKid, ATTRIBUTE_PROPERTY_NAME).
+                getAttribute(cacheKid, ATTRIBUTE_NAME).
                         ifPresent((t)
                                 -> properties.put(t.getNodeValue(),
-                                getAttributeValue(cacheKid, ATTRIBUTE_PROPERTY_VALUE))
+                                getAttributeValue(cacheKid, ATTRIBUTE_VALUE))
                         );
             }
         }
