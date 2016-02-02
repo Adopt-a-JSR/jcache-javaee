@@ -18,15 +18,15 @@ public class CustomCacheInjectionTest {
 
     @Inject
     @CacheContext("it")
-    Cache<String, String> first;
+    Cache first;
 
     @Inject
     @CacheContext("hack3rz")
-    Cache<String, String> second;
+    Cache second;
 
     @Inject
     @CacheContext("hack3rz")
-    Cache<String, String> alreadyInjected;
+    Cache alreadyInjected;
 
     @Test
     public void cachesWithDifferentNamesAreNotSame() {

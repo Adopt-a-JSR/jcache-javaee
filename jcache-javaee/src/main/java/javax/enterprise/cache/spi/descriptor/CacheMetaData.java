@@ -17,6 +17,9 @@ public class CacheMetaData {
     static final String PROPERTY_KEY_IS_MANAGEMENT_ENABLED = "management.enabled";
     static final String PROPERTY_KEY_IS_STATISTICS_ENABLED = "statistics.enabled";
 
+    private Class key;
+    private Class value;
+
     public CacheMetaData() {
         this.configurationProperties = new HashMap<>();
     }
@@ -64,11 +67,34 @@ public class CacheMetaData {
         return Boolean.parseBoolean(value);
     }
 
+    public void setKey(String key) {
+        try {
+            this.key = Class.forName(key);
+        } catch (ClassNotFoundException ex) {
+            throw new IllegalStateException("Cannot load class: " + value + " for as Cache key");
+        }
+    }
+
+    public void setValue(String value) {
+        try {
+            this.value = Class.forName(value);
+        } catch (ClassNotFoundException ex) {
+            throw new IllegalStateException("Cannot load class: " + value + " for as Cache value");
+        }
+    }
+
+    public Class getKey() {
+        return key;
+    }
+
+    public Class getValue() {
+        return value;
+    }
+
     public Configuration<String, String> getConfiguration() {
         MutableConfiguration<String, String> configuration = new MutableConfiguration<>();
         configuration.setStoreByValue(isStoreByValue()).
-                //hardcoded TBD
-                setTypes(String.class, String.class).
+                setTypes(this.key, this.value).
                 setManagementEnabled(isManagementEnabled()).
                 setStatisticsEnabled(isStatisticsEnabled());
         return configuration;

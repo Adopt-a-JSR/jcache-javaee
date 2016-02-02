@@ -35,7 +35,7 @@ public class CacheExposer {
     @Inject
     Instance<Map<String, String>> initialValues;
 
-    Map<String, Cache<String, String>> caches;
+    Map<String, Cache> caches;
 
     public void init(@Observes @Initialized(ApplicationScoped.class) Object doesntMatter) {
         this.caches = new HashMap<>();
@@ -46,14 +46,14 @@ public class CacheExposer {
 
     }
 
-    Map<String, Cache<String, String>> createCaches(List<CacheMetaData> cacheUnits) {
+    Map<String, Cache> createCaches(List<CacheMetaData> cacheUnits) {
         return cacheUnits.stream().collect(Collectors.toMap(CacheMetaData::getName, this::createFrom));
     }
 
-    Cache<String, String> createFrom(CacheMetaData unit) {
+    Cache createFrom(CacheMetaData unit) {
         Configuration<String, String> configuration = unit.getConfiguration();
         String cacheName = unit.getName();
-        Cache<String, String> cache = this.cacheManager.getCache(cacheName, String.class, String.class);
+        Cache<String, String> cache = this.cacheManager.getCache(cacheName, unit.getKey(), unit.getValue());
         if (cache == null) {
             cache = this.cacheManager.createCache(cacheName, configuration);
         }
@@ -61,7 +61,7 @@ public class CacheExposer {
     }
 
     @Produces
-    public Cache<String, String> exposeCache(InjectionPoint ip) {
+    public Cache exposeCache(InjectionPoint ip) {
         Annotated annotated = ip.getAnnotated();
         CacheContext annotation = annotated.getAnnotation(CacheContext.class);
         //single cache defined in DD, no annotation
