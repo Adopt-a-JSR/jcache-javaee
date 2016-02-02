@@ -13,12 +13,20 @@ Inspired by JPA
 
 <caches>
     <caching-provider>org.jsr107.ri.spi.RICachingProvider</caching-provider>
-    <cache name="it">
+    <cache name="it" key="java.lang.String" value="java.lang.String">
         <configuration>
             <property name="store.by.value" value="true"/>
             <property name="management.enabled" value="false"/>
             <property name="statistics.enabled" value="true"/>
             <property name="vendor.specific" value="unicorn"/>
+        </configuration>
+    </cache>
+    <cache name="hack3rz" key="java.lang.String" value="java.lang.String">
+        <configuration>
+            <property name="store.by.value" value="false"/>
+            <property name="management.enabled" value="true"/>
+            <property name="statistics.enabled" value="false"/>
+            <property name="java" value="duke"/>
         </configuration>
     </cache>
 </caches>
