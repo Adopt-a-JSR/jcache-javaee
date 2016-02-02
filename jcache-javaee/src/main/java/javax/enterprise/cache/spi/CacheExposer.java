@@ -29,7 +29,6 @@ import javax.inject.Inject;
 @ApplicationScoped
 public class CacheExposer {
 
-    Cache<String, String> store;
     CachingProvider cachingProvider;
     CacheManager cacheManager;
 
