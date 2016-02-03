@@ -60,3 +60,9 @@ Inspired by JPA
     }
     
 ```
+
+# Conventions
+
+1. Cache key does not have to be specified -- java.lang.String is assumed as default
+2. If there is only one cache defined, @CacheContext annotation can be omitted. 
+
