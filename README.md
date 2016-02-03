@@ -9,6 +9,11 @@ Integrate JSR-107 (JCache) with Java EE 8 considering already established conven
 
 Inspired by JPA
 
+## Location
+
+1. Within WAR: WEB-INF/classes/META-INF/cache.xml
+2. Within JAR: META-INF/cache.xml
+
 ```xml
 
 <caches>
