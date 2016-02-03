@@ -1,9 +1,9 @@
 package javax.enterprise.cache.spi.descriptor;
 
-import java.util.HashMap;
-import java.util.Map;
 import javax.cache.configuration.Configuration;
 import javax.cache.configuration.MutableConfiguration;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -17,11 +17,14 @@ public class CacheMetaData {
     static final String PROPERTY_KEY_IS_MANAGEMENT_ENABLED = "management.enabled";
     static final String PROPERTY_KEY_IS_STATISTICS_ENABLED = "statistics.enabled";
 
+    private static final Class<String> DEFAULT_KEY_VALUE = String.class;
+
     private Class key;
     private Class value;
 
     public CacheMetaData() {
         this.configurationProperties = new HashMap<>();
+        this.key = DEFAULT_KEY_VALUE;
     }
 
     public CacheMetaData(String name, boolean storeByValue,
