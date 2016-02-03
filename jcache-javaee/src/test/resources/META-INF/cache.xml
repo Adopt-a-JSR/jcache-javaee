@@ -8,7 +8,7 @@
             <property name="vendor.specific" value="unicorn"/>
         </configuration>
     </cache>
-    <cache name="hack3rz" key="java.lang.String" value="java.lang.String">
+    <cache name="hack3rz" value="java.lang.String">
         <configuration>
             <property name="store.by.value" value="false"/>
             <property name="management.enabled" value="true"/>
