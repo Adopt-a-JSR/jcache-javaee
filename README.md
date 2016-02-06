@@ -8,7 +8,7 @@ Integrate JSR-107 (JCache) with Java EE 8 considering already established conven
 
 # Cache descriptor
 
-Inspired by JPA
+Structure was inspired by JPA, cache.xml
 
 ## Location
 
