@@ -1,5 +1,6 @@
 # jcache-javaee
-JCache-Java EE Integration Bridge
+
+JCache Integration Bridge for Java EE 8
 
 # Goal
 
