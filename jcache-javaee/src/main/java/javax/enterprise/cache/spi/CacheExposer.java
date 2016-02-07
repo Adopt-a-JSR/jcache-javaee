@@ -1,9 +1,5 @@
 package javax.enterprise.cache.spi;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 import javax.cache.Cache;
 import javax.cache.CacheManager;
 import javax.cache.Caching;
@@ -21,10 +17,15 @@ import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.Annotated;
 import javax.enterprise.inject.spi.InjectionPoint;
 import javax.inject.Inject;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  *
  * @author airhacks.com
+ * @author Hendrik Ebbers
  */
 @ApplicationScoped
 public class CacheExposer {
@@ -35,7 +36,7 @@ public class CacheExposer {
     @Inject
     Instance<Map<String, String>> initialValues;
 
-    Map<String, Cache> caches;
+    Map<String, Cache<?, ?>> caches;
 
     public void init(@Observes @Initialized(ApplicationScoped.class) Object doesntMatter) {
         this.caches = new HashMap<>();
@@ -46,14 +47,14 @@ public class CacheExposer {
 
     }
 
-    Map<String, Cache> createCaches(List<CacheMetaData> cacheUnits) {
+    Map<String, Cache<?, ?>> createCaches(List<CacheMetaData> cacheUnits) {
         return cacheUnits.stream().collect(Collectors.toMap(CacheMetaData::getName, this::createFrom));
     }
 
-    Cache createFrom(CacheMetaData unit) {
-        Configuration<String, String> configuration = unit.getConfiguration();
+    <K, V> Cache<K, V> createFrom(CacheMetaData unit) {
+        Configuration<K, V> configuration = unit.getConfiguration();
         String cacheName = unit.getName();
-        Cache<String, String> cache = this.cacheManager.getCache(cacheName, unit.getKey(), unit.getValue());
+        Cache<K, V> cache = this.cacheManager.getCache(cacheName, unit.getKey(), unit.getValue());
         if (cache == null) {
             cache = this.cacheManager.createCache(cacheName, configuration);
         }
@@ -61,17 +62,17 @@ public class CacheExposer {
     }
 
     @Produces
-    public Cache exposeCache(InjectionPoint ip) {
+    public <K, V> Cache<K, V> exposeCache(InjectionPoint ip) {
         Annotated annotated = ip.getAnnotated();
         CacheContext annotation = annotated.getAnnotation(CacheContext.class);
         //single cache defined in DD, no annotation
         if (doesConventionApply(annotation)) {
-            return this.caches.values().iterator().next();
+            return (Cache<K, V>) this.caches.values().iterator().next();
         }
         //annotation defined, name is used to lookup cache
         if (annotation != null) {
             String cacheName = annotation.value();
-            Cache<String, String> cache = this.caches.get(cacheName);
+            Cache<K, V> cache = (Cache<K, V>) this.caches.get(cacheName);
             if (cache == null) {
                 throw new IllegalStateException("Unsatisfied cache dependency error. Cache with name: " + cacheName + " does not exist");
             }
