@@ -1,0 +1,11 @@
+<caches>
+    <caching-provider>org.jsr107.ri.spi.RICachingProvider</caching-provider>
+    <cache name="int-to-date" key="java.lang.Integer" value="java.util.Date">
+        <configuration>
+            <property name="store.by.value" value="true"/>
+            <property name="management.enabled" value="false"/>
+            <property name="statistics.enabled" value="true"/>
+            <property name="vendor.specific" value="unicorn"/>
+        </configuration>
+    </cache>
+</caches>

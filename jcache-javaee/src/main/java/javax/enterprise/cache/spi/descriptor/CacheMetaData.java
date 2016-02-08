@@ -8,6 +8,7 @@ import java.util.Map;
 /**
  *
  * @author airhacks.com
+ * @author Hendrik Ebbers
  */
 public class CacheMetaData {
 
@@ -94,8 +95,8 @@ public class CacheMetaData {
         return value;
     }
 
-    public Configuration<String, String> getConfiguration() {
-        MutableConfiguration<String, String> configuration = new MutableConfiguration<>();
+    public <K, V> Configuration<K, V> getConfiguration() {
+        MutableConfiguration<K, V> configuration = new MutableConfiguration<>();
         configuration.setStoreByValue(isStoreByValue()).
                 setTypes(this.key, this.value).
                 setManagementEnabled(isManagementEnabled()).
