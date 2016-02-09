@@ -27,7 +27,7 @@ Structure was inspired by JPA, cache.xml
             <property name="vendor.specific" value="unicorn"/>
         </configuration>
     </cache>
-    <cache name="hack3rz" key="java.lang.String" value="java.lang.String">
+    <cache name="hack3rz" key="java.lang.String" value="java.util.Date">
         <configuration>
             <property name="store.by.value" value="false"/>
             <property name="management.enabled" value="true"/>
@@ -45,15 +45,15 @@ Structure was inspired by JPA, cache.xml
 
     @Inject
     @CacheContext("it")
-    Cache first;
+    Cache<String, String> first;
 
     @Inject
     @CacheContext("hack3rz")
-    Cache second;
+    Cache<String, Date> second;
 
     @Inject
     @CacheContext("hack3rz")
-    Cache alreadyInjected;
+    Cache<String, Date> alreadyInjected;
 
     @Test
     public void cachesWithDifferentNamesAreNotSame() {
